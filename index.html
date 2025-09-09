@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping List</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <div class="navbar">
+    <a href="shopping.html">Berbelanja</a>
+    <a href="index.html">Catat List</a>
+    <a href="riwayat.html">Riwayat</a>
+  </div>
+  
+
+  <div class="navbar-judul">
+    <h2>Shopping List</h2>
+  </div>
+
+  <!-- Isi Budget -->
+  <div class="budget">
+    <h3>Isi Budget</h3>
+    <form id="isi_budget">
+      <label for="budget">Masukkan Budget anda</label><br>
+      <input type="number" id="budget" name="budget" required>
+      <button type="submit" id="btnBudget">Simpan</button>
+    </form>
+    <p id="tampilBudget"></p>
+  </div>
+  <br>
+
+  <!-- Tambah Barang -->
+  <div class="list_barang">
+    <h3>Tambah Barang</h3>
+    <form id="isi_barang">
+      <label for="barang">Nama Barang</label><br>
+      <input type="text" id="barang" name="barang" required><br>
+      <label for="jumlah">Jumlah Barang</label><br>
+      <input type="number" id="jumlah" name="jumlah" min="0.1" step="any" value="1" required>
+      <label for="satuan"></label>
+      <select id="satuan" name="satuan">
+        <option value="pcs">pcs</option>
+        <option value="liter">liter</option>
+        <option value="kg">kg</option>
+        <option value="ons">ons</option>
+        <option value="lusin">lusin</option>
+      </select> 
+      <br>
+      <button type="submit" id="btnBarang">Simpan</button>
+    </form>
+  </div>
+
+  <!-- Tabel Barang -->
+  <h3>Daftar Barang</h3>
+  <table border="1" id="tabelBarang">
+    <thead>
+      <tr>
+        <th>Nama Barang</th>
+        <th>Jumlah</th>
+        <th>Satuan</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+<br>
+  <div class="simpanList">
+    <button type="submit" id="btnsimpan">Simpan dan Lanjut Belanja</button>
+  </div>
+
+
+  <script>
+    // --- Simpan dan Tampilkan Budget ---
+    const budgetForm = document.getElementById("isi_budget");
+    const tampilBudget = document.getElementById("tampilBudget");
+
+    budgetForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const budget = document.getElementById("budget").value;
+
+      localStorage.setItem("budget", budget);
+      tampilBudget.textContent = "Budget Anda: Rp " + budget;
+      budgetForm.reset();
+    });
+
+    // tampilkan budget kalau ada di localStorage
+    window.addEventListener("load", function() {
+      const savedBudget = localStorage.getItem("budget");
+      if (savedBudget) {
+        tampilBudget.textContent = "Budget Anda: Rp " + savedBudget;
+      }
+    });
+
+    // --- Barang ---
+    const barangForm = document.getElementById("isi_barang");
+    const tabelBarang = document.querySelector("#tabelBarang tbody");
+
+    function loadBarang() {
+      const data = JSON.parse(localStorage.getItem("barangList")) || [];
+      tabelBarang.innerHTML = "";
+      data.forEach((item, index) => {
+        const row = tabelBarang.insertRow();
+        row.innerHTML = `
+          <td>${item.nama}</td>
+          <td>${item.jumlah}</td>
+          <td>${item.satuan}</td>
+          <td>
+            <button onclick="editBarang(${index})">Edit</button>
+            <button onclick="hapusBarang(${index})">Hapus</button>
+          </td>
+        `;
+      });
+    }
+
+    barangForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const nama = document.getElementById("barang").value;
+      const jumlah = document.getElementById("jumlah").value;
+      const satuan = document.getElementById("satuan").value;
+
+      let data = JSON.parse(localStorage.getItem("barangList")) || [];
+      data.push({ nama, jumlah, satuan });
+      localStorage.setItem("barangList", JSON.stringify(data));
+      loadBarang();
+      barangForm.reset();
+    });
+
+    // Hapus barang
+    function hapusBarang(index) {
+      let data = JSON.parse(localStorage.getItem("barangList")) || [];
+      data.splice(index, 1);
+      localStorage.setItem("barangList", JSON.stringify(data));
+      loadBarang();
+    }
+
+    // Edit barang
+    function editBarang(index) {
+      let data = JSON.parse(localStorage.getItem("barangList")) || [];
+      const newJumlah = prompt("Masukkan jumlah baru:", data[index].jumlah);
+      if (newJumlah !== null) {
+        data[index].jumlah = newJumlah;
+        localStorage.setItem("barangList", JSON.stringify(data));
+        loadBarang();
+      }
+    }
+
+    // Load data saat pertama kali buka
+      window.onload = function() {
+    const savedBudget = localStorage.getItem("budget");
+    const savedBarang = JSON.parse(localStorage.getItem("barangList")) || [];
+
+    // Kalau tidak ada budget & barang, berarti reset → kosongkan tampilan
+    if (!savedBudget && savedBarang.length === 0) {
+      tampilBudget.textContent = "";
+      tabelBarang.innerHTML = "";
+    } else {
+      // Kalau ada data lama, tampilkan
+      if (savedBudget) {
+        tampilBudget.textContent = "Budget Anda: Rp " + savedBudget;
+      }
+      loadBarang();
+    }
+  }
+    
+  const btnSimpan = document.getElementById("btnsimpan");
+
+  btnSimpan.addEventListener("click", function() {
+    // Data sudah tersimpan di localStorage (budget & barangList)
+    // Jadi tinggal redirect ke halaman shopping.html
+    window.location.href = "shopping.html";
+  });
+  </script>
+</body>
+</html>

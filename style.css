@@ -1,0 +1,231 @@
+/* Reset dasar */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", Arial, sans-serif;
+}
+
+/* Body */
+body {
+  background: #f9fafb;
+  color: #333;
+  padding: 16px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Judul */
+h1, h2 {
+  text-align: center;
+  margin-bottom: 16px;
+  color: #2d3748;
+}
+
+/* Form input */
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 4px rgba(79, 70, 229, 0.3);
+}
+
+/* Tombol */
+button {
+  background: #4f46e5;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  border: none;
+}
+
+button:hover {
+  background: #4338ca;
+}
+
+/* Tabel */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  font-size: 14px;
+}
+
+th {
+  background: #f1f5f9;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+/* Ringkasan */
+.ringkasan {
+  background: #e0e7ff;
+  color: #1e293b;
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 16px;
+  font-size: 15px;
+}
+
+/* Tombol bawah */
+.btnKembali {
+  margin-top: 20px;
+}
+
+.btnKembali button {
+  width: 100%;
+  background: #22c55e;
+}
+
+.btnKembali button:hover {
+  background: #15803d;
+}
+
+/* Responsif */
+@media (max-width: 480px) {
+  body {
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  th, td {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 12px;
+  }
+}
+
+/* Bubble item */
+.bubble {
+  background: #f1f8ff;
+  padding: 12px;
+  border-radius: 12px;
+  margin: 12px 0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.bubble-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.bubble-content .centang {
+  width: 18px;
+  height: 18px;
+  margin-top: 5px;
+}
+
+.bubble .info {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.bubble input[type="number"] {
+  width: 80px;
+  padding: 4px 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.aksi {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.aksi button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.aksi .edit {
+  background: #007bff;
+  color: white;
+}
+
+.aksi .hapus {
+  background: #dc3545;
+  color: white;
+}
+
+/* Responsif HP */
+@media (max-width: 480px) {
+  .bubble input[type="number"] {
+    width: 65px;
+  }
+}
+
+/* === Navbar bawah === */
+.navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #007bff;   /* warna biru */
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.navbar a:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* === Untuk desktop === */
+@media (min-width: 768px) {
+  .navbar {
+    justify-content: center;
+    gap: 40px;
+  }
+  .navbar a {
+    font-size: 16px;
+  }
+}
+
+/* === Supaya konten tidak ketutup navbar === */
+body {
+  margin-bottom: 60px; /* tinggi navbar */
+}
+

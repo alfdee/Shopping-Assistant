@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riwayat Belanja</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="shopping.html">Berbelanja</a>
+    <a href="index.html">Catat List</a>
+    <a href="riwayat.html">Riwayat</a>
+  </div>
+
+  <div class="navbar-judul">
+  <h2>Riwayat Belanja</h2>
+  </div>
+
+  <!-- Total Semua Pengeluaran -->
+  <div id="totalSemua" class="ringkasan"></div>
+
+  <!--Tabel riwayat-->
+  <div class="tabel-riwayat" id="containerRiwayat"></div>
+
+  <br>
+  <div class="btnKembali">
+    <button type="button" id="btnKembali">Done</button>
+    <button type="button" id="btnReset" style="margin-top:10px; background:#ef4444;">Reset Riwayat</button>
+  </div>
+
+  <script>
+    const container = document.getElementById("containerRiwayat");
+    const totalSemuaDiv = document.getElementById("totalSemua");
+
+    // Ambil semua riwayat dari localStorage
+    const riwayat = JSON.parse(localStorage.getItem("riwayatBelanja")) || [];
+
+    if (riwayat.length === 0) {
+      totalSemuaDiv.innerHTML = "<p><strong>Total Pengeluaran:</strong> Rp 0</p>";
+      container.innerHTML = "<p>Belum ada riwayat belanja.</p>";
+    } else {
+      let totalSemua = 0;
+
+      // Loop setiap riwayat belanja
+      riwayat.forEach((belanja, index) => {
+        const table = document.createElement("table");
+        table.border = "1";
+        table.style.marginBottom = "20px";
+        table.style.width = "100%";
+
+        // Buat header
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>Nama Barang</th>
+              <th>Jumlah</th>
+              <th>Satuan</th>
+              <th>Total Harga</th>
+            </tr>
+          </thead>
+        `;
+
+        const tbody = document.createElement("tbody");
+
+        // Daftar barang
+        belanja.barangList.forEach(item => {
+          const row = tbody.insertRow();
+          row.insertCell(0).innerText = item.nama;
+          row.insertCell(1).innerText = item.jumlah;
+          row.insertCell(2).innerText = item.satuan;
+
+          const totalHarga = (parseInt(item.jumlah) || 0) * (parseInt(item.harga) || 0);
+          row.insertCell(3).innerText = "Rp " + totalHarga.toLocaleString("id-ID");
+        });
+
+        // Tambah ringkasan
+        const rowRingkasan = tbody.insertRow();
+        const cellRingkasan = rowRingkasan.insertCell(0);
+        cellRingkasan.colSpan = 4;
+        cellRingkasan.innerHTML = `
+          <strong>Riwayat #${index + 1}</strong><br>
+          <strong>Tanggal:</strong> ${belanja.tanggal} <br>
+          <strong>Budget:</strong> Rp ${parseInt(belanja.budget).toLocaleString("id-ID")} <br>
+          <strong>Total Belanja:</strong> Rp ${parseInt(belanja.total).toLocaleString("id-ID")}
+        `;
+
+        table.appendChild(tbody);
+        container.appendChild(table);
+
+        // Tambahkan ke total semua
+        totalSemua += parseInt(belanja.total) || 0;
+      });
+
+      // Tampilkan total semua di atas
+      totalSemuaDiv.innerHTML = `
+        <p><strong>Total Pengeluaran Semua Riwayat:</strong> Rp ${totalSemua.toLocaleString("id-ID")}</p>
+      `;
+    }
+
+    // Tombol kembali ke index.html
+    document.getElementById("btnKembali").addEventListener("click", () => {
+      // Hapus data aktif supaya index.html kosong lagi
+      localStorage.removeItem("budget");
+      localStorage.removeItem("barangList");
+
+      // Balik ke halaman index
+      window.location.href = "index.html";
+    });
+
+    // Tombol reset riwayat
+    document.getElementById("btnReset").addEventListener("click", () => {
+      if (confirm("Yakin ingin menghapus semua riwayat belanja?")) {
+        localStorage.removeItem("riwayatBelanja");
+        location.reload();
+      }
+    });
+  </script>
+
+</body>
+</html>
